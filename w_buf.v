@@ -8,10 +8,10 @@ parameter ADDR_WIDTH = $clog2(DEPTH),
 parameter INIT_FILE = "C:/Users/User/Desktop/weight.txt"
 )(
 input wire clk,
-input wire en,
+input wire w_buf_en_i,
 input wire rst_i,
-input wire [ADDR_WIDTH - 1:0] addr, //4bit//16
-output reg [WIDTH * COL - 1:0] dout
+input wire [ADDR_WIDTH - 1:0] w_buf_addr_i, //4bit//16
+output reg [WIDTH * COL - 1:0] w_buf_data_o
 );
 
 reg [WIDTH - 1 :0] mem [0:DEPTH * COL - 1];
@@ -32,16 +32,16 @@ endgenerate
 
 always@(posedge clk) begin
     if(!rst_i) begin
-            dout <= {WIDTH * COL{1'b0}};
+            w_buf_data_o <= {WIDTH * COL{1'b0}};
      end
      else begin
-        if(en) begin
+        if(w_buf_en_i) begin
             for(i = 0; i < DEPTH; i = i + 1) begin
-                dout[(i*WIDTH)+:WIDTH] <= mem[addr * COL + (COL - 1 - i)];
+                w_buf_data_o[(i*WIDTH)+:WIDTH] <= mem[w_buf_addr_i * COL + (COL - 1 - i)];
             end
         end
         else begin
-                dout <= {WIDTH * COL{1'b0}};
+                w_buf_data_o <= {WIDTH * COL{1'b0}};
         end
     end
 end
