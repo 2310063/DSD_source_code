@@ -1,0 +1,39 @@
+module temp_buf #(
+parameter WIDTH = 32,
+parameter DEPTH = 64,
+parameter ADDR_WIDTH = $clog2(DEPTH)
+//parameter INIT_FILE = "C:/Users/User/Desktop/weight.txt"
+)(
+input wire clk,
+input wire rst_i,
+input wire en_i,
+input wire wen_i,
+input wire [WIDTH * DEPTH - 1:0] data_i,
+input wire [ADDR_WIDTH - 1:0] addr_i,
+output reg [WIDTH - 1:0] dout_o
+);
+
+reg [WIDTH - 1 :0] mem [0:DEPTH - 1];
+integer i;
+
+always @(posedge clk) begin
+    if(!rst_i) begin
+        dout_o <= {WIDTH{1'b0}};
+    end
+    else begin
+        if(en_i) begin
+            if(wen_i) begin
+            for(i = 0; i < DEPTH; i = i + 1) begin
+                    mem[DEPTH - 1 - i] <= data_i[(i * WIDTH)+: WIDTH];
+                end
+            end
+            else begin
+                dout_o <= mem[addr_i];
+            end
+        end
+        else begin
+            dout_o <={WIDTH{1'b0}};
+        end
+    end
+end
+endmodule
