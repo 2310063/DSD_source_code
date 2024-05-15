@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module w_buf #(
 parameter WIDTH = 32,
 parameter DEPTH = 16,
