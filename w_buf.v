@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module w_buf #(
 parameter WIDTH = 32,
 parameter DEPTH = 16,
@@ -10,11 +8,11 @@ parameter INIT_FILE = "C:/Users/User/Desktop/weight.txt"
 input wire clk,
 input wire w_buf_en_i,
 input wire rst_i,
-input wire [ADDR_WIDTH - 1:0] w_buf_addr_i, //4bit//16
-output reg [WIDTH * COL - 1:0] w_buf_data_o
+input wire [ADDR_WIDTH - 1 : 0] w_buf_addr_i, //4bit//16
+output reg [WIDTH * COL - 1 : 0] w_buf_data_o
 );
 
-reg [WIDTH - 1 :0] mem [0:DEPTH * COL - 1];
+reg [WIDTH - 1 : 0] mem [0 : DEPTH * COL - 1];
 integer i;
 
 generate
@@ -36,8 +34,8 @@ always@(posedge clk) begin
      end
      else begin
         if(w_buf_en_i) begin
-            for(i = 0; i < DEPTH; i = i + 1) begin
-                w_buf_data_o[(i*WIDTH)+:WIDTH] <= mem[w_buf_addr_i * COL + (COL - 1 - i)];
+            for(i = 0; i < COL; i = i + 1) begin
+                w_buf_data_o[(i * WIDTH) +: WIDTH] <= mem[ w_buf_addr_i * COL + i ];   // could be (DEPTH - 1 - i)
             end
         end
         else begin
