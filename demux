@@ -1,0 +1,16 @@
+module demux
+#(
+    parameter WIDTH = 32,
+    parameter DEPTH = 64
+ )(
+    input wire  [WIDTH * DEPTH - 1:0] buf_re_data_i,
+    input wire                        demux_sel_i,
+    
+    output wire [WIDTH * DEPTH - 1:0] temp_buf_in_o, //64 * 32 - 1
+    output wire [WIDTH * DEPTH - 1:0] y_buf_data_o
+    );
+    
+    assign temp_buf_in_o = demux_sel_i ? buf_re_data_i : {WIDTH * DEPTH - 1{1'b0}};
+    assign y_buf_data_o = demux_sel_i ? {WIDTH * DEPTH - 1{1'b0}}: buf_re_data_i;
+    
+endmodule
